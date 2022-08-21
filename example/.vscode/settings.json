@@ -1,0 +1,8 @@
+{
+    // zsh is the default shell in macOS and it's not supported
+    // by rnenv currently.
+    "terminal.integrated.defaultProfile.osx": "bash",
+
+    // configure the root of 'rnenv' to be set in terminals.
+    "rnenv.root": "~/Work/rnenv",
+}

@@ -23,35 +23,46 @@ export function activate(context: vscode.ExtensionContext) {
 	let disposable = vscode.commands.registerCommand('vscode-rnenv.activate', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
+		if (statusBarItem === undefined) {
+			initStatusBarItem(context);
+		}
 
-		const commandId = 'rnenv.showUsedGpuIndex';
+		for (let terminal of vscode.window.terminals) {
+			activateTerminal(terminal);
+		}
 
-		context.subscriptions.push(vscode.commands.registerCommand(commandId, async () => {
-			const items: GpuIndexItem[] = Array.from(Array(numOfGpus), (_, index) => getGpuIndexItem(index));
-			const options: vscode.QuickPickOptions = {
-				title: 'Choose a GPU to use',
-			};
-
-			const selection = await vscode.window.showQuickPick(items, options);
-
-			if (selection !== undefined && selection.index !== usedGpuIndex) {
-				usedGpuIndex = selection.index;
-				vscode.window.showInformationMessage(`Environment is now using GPU ${selection.index}`);
-				updateStatusBarItem();
-			}
-		}));
-
-		statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right);
-		statusBarItem.command = commandId;
-		statusBarItem.tooltip = `This environment is using GPU at index ${usedGpuIndex}`;
-		statusBarItem.show();
-		context.subscriptions.push(statusBarItem);
-
-		vscode.window.showInformationMessage('Activated GPU environment');
-		updateStatusBarItem();
+		context.subscriptions.push(vscode.window.onDidOpenTerminal(activateTerminal));
 	});
 
 	context.subscriptions.push(disposable);
+}
+
+function initStatusBarItem(context: vscode.ExtensionContext): void {
+	const commandId = 'rnenv.showUsedGpuIndex';
+
+	context.subscriptions.push(vscode.commands.registerCommand(commandId, async () => {
+		const items: GpuIndexItem[] = Array.from(Array(numOfGpus), (_, index) => getGpuIndexItem(index));
+		const options: vscode.QuickPickOptions = {
+			title: 'Choose a GPU to use',
+		};
+
+		const selection = await vscode.window.showQuickPick(items, options);
+
+		if (selection !== undefined && selection.index !== usedGpuIndex) {
+			usedGpuIndex = selection.index;
+			vscode.window.showInformationMessage(`Environment is now using GPU ${selection.index}`);
+			updateStatusBarItem();
+		}
+	}));
+
+	statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right);
+	statusBarItem.command = commandId;
+	statusBarItem.tooltip = `This environment is using GPU at index ${usedGpuIndex}`;
+	statusBarItem.show();
+	context.subscriptions.push(statusBarItem);
+
+	vscode.window.showInformationMessage('Activated GPU environment');
+	updateStatusBarItem();
 }
 
 function getGpuIndexItem(index: number): GpuIndexItem {
@@ -77,6 +88,17 @@ function getGpuIndexItem(index: number): GpuIndexItem {
 
 function updateStatusBarItem(): void {
 	statusBarItem.text = `$(organization) GPU ${usedGpuIndex}`;
+}
+
+function activateTerminal(terminal: vscode.Terminal): void {
+	const root: string | undefined = vscode.workspace.getConfiguration('rnenv').get('root');
+
+	if (root !== undefined) {
+		terminal.sendText(`export PATH=${root}/bin:$PATH`);
+		terminal.sendText('eval "$(rnenv init -)"');
+	}
+
+	terminal.sendText('rnenv activate');
 }
 
 // this method is called when your extension is deactivated
