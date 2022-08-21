@@ -10,14 +10,14 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:vscode-rnenv.helloWorld"
+    "onCommand:vscode-rnenv.activate"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vscode-rnenv.helloWorld",
-        "title": "Hello World"
+        "command": "vscode-rnenv.activate",
+        "title": "GPU: Activate Environment"
       }
     ]
   },

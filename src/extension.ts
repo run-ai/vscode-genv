@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('vscode-rnenv.helloWorld', () => {
+	let disposable = vscode.commands.registerCommand('vscode-rnenv.activate', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
 
@@ -47,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
 		statusBarItem.show();
 		context.subscriptions.push(statusBarItem);
 
-		vscode.window.showInformationMessage(`GPU environment activated and using GPU ${usedGpuIndex}`);
+		vscode.window.showInformationMessage('Activated GPU environment');
 		updateStatusBarItem();
 	});
 
