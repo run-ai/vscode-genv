@@ -1,7 +1,7 @@
 {
-  "name": "vscode-rnenv",
-  "displayName": "vscode-rnenv",
-  "description": "Visual Studio Code extension for rnenv",
+  "name": "vscode-genv",
+  "displayName": "vscode-genv",
+  "description": "Visual Studio Code extension for genv",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.70.0"
@@ -10,13 +10,13 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:vscode-rnenv.activate"
+    "onCommand:vscode-genv.activate"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vscode-rnenv.activate",
+        "command": "vscode-genv.activate",
         "title": "GPU: Activate Environment"
       }
     ]

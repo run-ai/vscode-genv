@@ -1,3 +1,3 @@
 import os
 
-os.system('env | grep -e "RNENV\\|CUDA"')
+os.system('env | grep -e "GENV\\|CUDA"')

@@ -15,12 +15,12 @@ type GpuIndexItem = vscode.QuickPickItem & { index: number };
 export function activate(context: vscode.ExtensionContext) {
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "vscode-rnenv" is now active!');
+	console.log('Congratulations, your extension "vscode-genv" is now active!');
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('vscode-rnenv.activate', () => {
+	let disposable = vscode.commands.registerCommand('vscode-genv.activate', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
 		if (statusBarItem === undefined) {
@@ -38,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function initStatusBarItem(context: vscode.ExtensionContext): void {
-	const commandId = 'rnenv.showUsedGpuIndex';
+	const commandId = 'genv.showUsedGpuIndex';
 
 	context.subscriptions.push(vscode.commands.registerCommand(commandId, async () => {
 		const items: GpuIndexItem[] = Array.from(Array(numOfGpus), (_, index) => getGpuIndexItem(index));
@@ -91,14 +91,14 @@ function updateStatusBarItem(): void {
 }
 
 function activateTerminal(terminal: vscode.Terminal): void {
-	const root: string | undefined = vscode.workspace.getConfiguration('rnenv').get('root');
+	const root: string | undefined = vscode.workspace.getConfiguration('genv').get('root');
 
 	if (root !== undefined) {
 		terminal.sendText(`export PATH=${root}/bin:$PATH`);
-		terminal.sendText('eval "$(rnenv init -)"');
+		terminal.sendText('eval "$(genv init -)"');
 	}
 
-	terminal.sendText('rnenv activate');
+	terminal.sendText('genv activate');
 }
 
 // this method is called when your extension is deactivated

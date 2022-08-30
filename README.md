@@ -1,6 +1,6 @@
-# vscode-rnenv README
+# vscode-genv README
 
-This is the README for your extension "vscode-rnenv". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "vscode-genv". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 
