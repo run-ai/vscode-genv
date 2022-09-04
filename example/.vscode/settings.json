@@ -2,7 +2,4 @@
     // zsh is the default shell in macOS and it's not supported
     // by genv currently.
     "terminal.integrated.defaultProfile.osx": "bash",
-
-    // configure the root of 'genv' to be set in terminals.
-    "genv.root": "~/Work/genv",
 }

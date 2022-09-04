@@ -10,7 +10,11 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:vscode-genv.activate"
+    "onCommand:vscode-genv.activate",
+    "onCommand:vscode-genv.config.gpus",
+    "onCommand:vscode-genv.config.name",
+    "onCommand:vscode-genv.attach",
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -18,6 +22,18 @@
       {
         "command": "vscode-genv.activate",
         "title": "GPU: Activate Environment"
+      },
+      {
+        "command": "vscode-genv.config.gpus",
+        "title": "GPU: Configure Environment Device Count"
+      },
+      {
+        "command": "vscode-genv.config.name",
+        "title": "GPU: Configure Environment Name"
+      },
+      {
+        "command": "vscode-genv.attach",
+        "title": "GPU: Attach Devices"
       }
     ]
   },
@@ -31,7 +47,6 @@
   },
   "devDependencies": {
     "@types/glob": "^7.2.0",
-    "@types/lodash": "^4.14.184",
     "@types/mocha": "^9.1.1",
     "@types/node": "16.x",
     "@types/vscode": "^1.70.0",
@@ -43,7 +58,5 @@
     "mocha": "^10.0.0",
     "typescript": "^4.7.4"
   },
-  "dependencies": {
-    "lodash": "^4.17.21"
-  }
+  "dependencies": {}
 }
