@@ -45,6 +45,8 @@ export async function activate(context: vscode.ExtensionContext) {
 				for (let terminal of vscode.window.terminals) {
 					terminal.sendText('genv config gpus --refresh');
 				}
+
+        // TODO(raz): should we reattach here or at least suggest it to the user?
 			}
 		} else {
 			vscode.window.showErrorMessage('Not running in an activated GPU environment');
@@ -70,6 +72,10 @@ export async function activate(context: vscode.ExtensionContext) {
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('vscode-genv.attach', async () => {
+    if (!environment.activated()) {
+      await vscode.commands.executeCommand('vscode-genv.activate');
+    }
+
 		if (environment.activated()) {
 			if (environment.config().gpus === undefined) {
 				await vscode.commands.executeCommand('vscode-genv.config.gpus');
@@ -86,8 +92,6 @@ export async function activate(context: vscode.ExtensionContext) {
         statusBarItem.tooltip = `This environment is attached to ${statusBarItem.text} at ${environment.indices()}`;
         statusBarItem.command = undefined;
       }
-		} else {
-			vscode.window.showErrorMessage('Not running in an activated GPU environment');
 		}
 	}));
 }
