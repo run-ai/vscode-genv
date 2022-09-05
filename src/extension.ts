@@ -1,7 +1,5 @@
 import * as vscode from 'vscode';
-import * as control from './control';
 import * as environment from './environment';
-import * as utils from './utils';
 
 let statusBarItem: vscode.StatusBarItem;
 
@@ -10,13 +8,11 @@ export async function activate(context: vscode.ExtensionContext) {
 		if (environment.activated()) {
 			vscode.window.showWarningMessage('Already running in an activated GPU environment');
 		} else {
-			environment.activate();
-			environment.configName(`vscode/${vscode.workspace.name}`);
-
-			await utils.sleep(1000); // wait a bit for the command to actually take place
+			await environment.activate();
+			await environment.configName(`vscode/${vscode.workspace.name}`);
 
 			for (let terminal of vscode.window.terminals) {
-				terminal.sendText(`genv activate --id ${environment.eid} --quiet`);
+				terminal.sendText(`genv activate --id ${environment.eid}`);
 			}
 
 			context.subscriptions.push(vscode.window.onDidOpenTerminal(terminal => {
@@ -44,9 +40,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			if (input) {
 				const gpus: number = parseInt(input);
 
-				environment.configGPUs(gpus);
-
-				await utils.sleep(1000); // wait a bit for the command to actually take place
+				await environment.configGPUs(gpus);
 
 				for (let terminal of vscode.window.terminals) {
 					terminal.sendText('genv config gpus --refresh');
@@ -64,9 +58,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			});
 
 			if (name) {
-				environment.configName(name);
-
-				await utils.sleep(1000); // wait a bit for the command to actually take place
+				await environment.configName(name);
 
 				for (let terminal of vscode.window.terminals) {
 					terminal.sendText('genv config name --refresh');
@@ -79,27 +71,23 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(vscode.commands.registerCommand('vscode-genv.attach', async () => {
 		if (environment.activated()) {
-			if (environment.gpus === undefined) {
+			if (environment.config().gpus === undefined) {
 				await vscode.commands.executeCommand('vscode-genv.config.gpus');
 			}
 
-			environment.attach();
+      if (environment.config().gpus) {
+        await environment.attach();
 
-			await utils.sleep(1000); // wait a bit for the command to actually take place
+        for (let terminal of vscode.window.terminals) {
+          terminal.sendText('genv attach --refresh');
+        }
 
-			for (let terminal of vscode.window.terminals) {
-				terminal.sendText('genv attach --refresh');
-			}
-
-			statusBarItem.text = environment.gpus === 1 ? '1 GPU' : `${environment.gpus} GPUs`;
-			statusBarItem.tooltip = `This environment is attached to ${statusBarItem.text}`;
-			statusBarItem.command = undefined;
+        statusBarItem.text = environment.config().gpus === 1 ? '1 GPU' : `${environment.config().gpus} GPUs`;
+        statusBarItem.tooltip = `This environment is attached to ${statusBarItem.text} at ${environment.indices()}`;
+        statusBarItem.command = undefined;
+      }
 		} else {
 			vscode.window.showErrorMessage('Not running in an activated GPU environment');
 		}
 	}));
-}
-
-export function deactivate() {
-	control.dispose();
 }

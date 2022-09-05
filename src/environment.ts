@@ -1,27 +1,61 @@
-import * as control from './control';
+import * as os from 'os';
+import * as devices from './genv/devices';
+import * as envs from './genv/envs';
 
-export var eid: number | undefined;
-export var gpus: number | undefined;
+interface Config {
+	gpus?: number;
+	name?: string;
+}
+
+interface State {
+	activated: boolean;
+	config: Config;
+	indices: number[];
+}
+
+let state: State = {
+	activated: false,
+	config: {},
+	indices: [],
+};
+
+export const eid: number = process.pid;
 
 export function activated(): boolean {
-	return eid !== undefined;
+	return state.activated;
 }
 
-export function activate() {
-	eid = process.pid;
-
-	control.sendText(`genv activate --id ${eid}`);
+export function config(): Config {
+  return state.config;
 }
 
-export function configName(name: string) {
-	control.sendText(`genv config name ${name}`);
+export function indices(): number[] {
+	return state.indices;
 }
 
-export function configGPUs(value: number) {
-	gpus = value;
-	control.sendText(`genv config gpus ${gpus}`);
+// TODO(raz): support deactivating
+export async function activate() {
+	if (!state.activated) {
+		const info = os.userInfo();
+		await envs.activate(process.pid, eid, info.uid, info.username);
+		state.activated = true;
+	}
 }
 
-export function attach() {
-	control.sendText('genv attach');
+export async function configGPUs(count: number) {
+  await envs.configGPUs(eid, count);
+	state.config.gpus = count;
+}
+
+export async function configName(name: string) {
+  await envs.configName(eid, name);
+  state.config.name = name;
+}
+
+// TODO(raz): support detaching
+export async function attach() {
+  if (state.config.gpus) {
+    const stdout = await devices.attach(eid, state.config.gpus);
+	  state.indices = stdout.trim().split(',').map(Number);
+  }
 }
