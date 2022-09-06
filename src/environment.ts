@@ -56,6 +56,6 @@ export async function configName(name: string) {
 export async function attach() {
   if (state.config.gpus) {
     const stdout = await devices.attach(eid, state.config.gpus);
-	  state.indices = stdout.trim().split(',').map(Number);
+	  state.indices = stdout.split(',').map(Number);
   }
 }

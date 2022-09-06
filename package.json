@@ -14,7 +14,8 @@
     "onCommand:vscode-genv.config.gpus",
     "onCommand:vscode-genv.config.name",
     "onCommand:vscode-genv.attach",
-    "onStartupFinished"
+    "onView:vscode-genv.devices",
+    "onView:vscode-genv.envs"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -34,8 +35,53 @@
       {
         "command": "vscode-genv.attach",
         "title": "GPU: Attach Devices"
+      },
+      {
+        "command": "vscode-genv.devices.refresh",
+        "title": "Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "vscode-genv.envs.refresh",
+        "title": "Refresh",
+        "icon": "$(refresh)"
       }
-    ]
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "vscode-genv.devices.refresh",
+          "when": "view == vscode-genv.devices",
+          "group": "navigation"
+        },
+        {
+          "command": "vscode-genv.envs.refresh",
+          "when": "view == vscode-genv.envs",
+          "group": "navigation"
+        }
+      ]
+    },
+    "views": {
+      "gpus": [
+        {
+          "id": "vscode-genv.envs",
+          "name": "Environments"
+        },
+        {
+          "id": "vscode-genv.devices",
+          "name": "Devices"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "gpus",
+          "title": "GPUs",
+          "icon": "resources/gpu.svg"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -58,5 +104,7 @@
     "mocha": "^10.0.0",
     "typescript": "^4.7.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "moment": "^2.29.4"
+  }
 }
