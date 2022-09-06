@@ -14,6 +14,7 @@
     "onCommand:genv.config.gpus",
     "onCommand:genv.config.name",
     "onCommand:genv.attach",
+    "onView:genv.env",
     "onView:genv.devices",
     "onView:genv.envs"
   ],
@@ -39,6 +40,10 @@
       {
         "command": "genv.detach",
         "title": "GPUs: Detach Devices"
+      },
+      {
+        "command": "genv.env.refresh",
+        "title": "Refresh"
       },
       {
         "command": "genv.devices.refresh",
@@ -68,6 +73,10 @@
     "views": {
       "gpus": [
         {
+          "id": "genv.env",
+          "name": "Active"
+        },
+        {
           "id": "genv.envs",
           "name": "Environments"
         },
@@ -85,7 +94,13 @@
           "icon": "resources/gpu.svg"
         }
       ]
-    }
+    },
+    "viewsWelcome": [
+      {
+        "view": "genv.env",
+        "contents": "GPU environment is not activated [learn more](https://github.com/run-ai/genv).\n[Activate Environment](command:genv.activate)"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

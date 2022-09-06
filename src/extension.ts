@@ -1,11 +1,19 @@
 import * as vscode from 'vscode';
 import * as environment from './environment';
 import { DevicesProvider } from './provider/devices';
+import { EnvProvider } from './provider/env';
 import { EnvsProvider } from './provider/envs';
 
 let statusBarItem: vscode.StatusBarItem;
 
 export async function activate(context: vscode.ExtensionContext) {
+  const envProvider = new EnvProvider();
+
+  context.subscriptions.push(vscode.window.registerTreeDataProvider('genv.env', envProvider));
+  context.subscriptions.push(vscode.commands.registerCommand('genv.env.refresh', () => {
+    envProvider.refresh();
+	}));
+
   const devicesProvider = new DevicesProvider();
 
   context.subscriptions.push(vscode.window.registerTreeDataProvider('genv.devices', devicesProvider));
@@ -42,6 +50,7 @@ export async function activate(context: vscode.ExtensionContext) {
       statusBarItem.show();
       context.subscriptions.push(statusBarItem);
 
+      vscode.commands.executeCommand('genv.env.refresh');
       vscode.commands.executeCommand('genv.envs.refresh');
     }
   }));
@@ -50,6 +59,7 @@ export async function activate(context: vscode.ExtensionContext) {
     if (environment.activated()) {
       const input: string | undefined = await vscode.window.showInputBox({
         placeHolder: 'Enter GPU count for the environment',
+        value: environment.config().gpus ? `${environment.config().gpus}` : undefined,
         validateInput: function(input: string): string | undefined {
           return /^([1-9]\d*)?$/.test(input) ? undefined : 'Must be an integer grather than 0';
         }
@@ -65,6 +75,8 @@ export async function activate(context: vscode.ExtensionContext) {
         }
 
         // TODO(raz): should we reattach here or at least suggest it to the user?
+
+        vscode.commands.executeCommand('genv.env.refresh');
       }
     } else {
       vscode.window.showErrorMessage('Not running in an activated GPU environment');
@@ -75,6 +87,7 @@ export async function activate(context: vscode.ExtensionContext) {
     if (environment.activated()) {
       const name: string | undefined = await vscode.window.showInputBox({
         placeHolder: 'Enter name for the environment',
+        value: environment.config().name,
       });
 
       if (name) {
@@ -83,6 +96,9 @@ export async function activate(context: vscode.ExtensionContext) {
         for (let terminal of vscode.window.terminals) {
           terminal.sendText('genv config name --refresh');
         }
+
+        vscode.commands.executeCommand('genv.env.refresh');
+        vscode.commands.executeCommand('genv.envs.refresh');
       }
     } else {
       vscode.window.showErrorMessage('Not running in an activated GPU environment');
@@ -110,6 +126,7 @@ export async function activate(context: vscode.ExtensionContext) {
         statusBarItem.tooltip = `This environment is attached to ${statusBarItem.text} at ${environment.indices()}`;
         statusBarItem.command = undefined;
 
+        vscode.commands.executeCommand('genv.env.refresh');
         vscode.commands.executeCommand('genv.devices.refresh');
       }
     }
@@ -118,17 +135,20 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.commands.registerCommand('genv.detach', async () => {
     if (environment.activated()) {
       if (environment.attacahed()) {
-        await environment.detach();
+        if (await vscode.window.showQuickPick(['No', 'Yes'], { placeHolder: 'Are you sure you want to detach the environment from GPUs?' }) === 'Yes') {
+          await environment.detach();
 
-        for (let terminal of vscode.window.terminals) {
-          terminal.sendText('genv attach --refresh');
+          for (let terminal of vscode.window.terminals) {
+            terminal.sendText('genv attach --refresh');
+          }
+
+          statusBarItem.command = 'genv.attach';
+          statusBarItem.tooltip = 'This environment is not attached to any GPU';
+          statusBarItem.text = 'No GPUs';
+
+          vscode.commands.executeCommand('genv.env.refresh');
+          vscode.commands.executeCommand('genv.devices.refresh');
         }
-
-        statusBarItem.command = 'genv.attach';
-        statusBarItem.tooltip = 'This environment is not attached to any GPU';
-        statusBarItem.text = 'No GPUs';
-
-        vscode.commands.executeCommand('genv.devices.refresh');
       }
     } else {
       vscode.window.showWarningMessage('Not running in an activated GPU environment');
