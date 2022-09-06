@@ -22,19 +22,23 @@
     "commands": [
       {
         "command": "genv.activate",
-        "title": "GPU: Activate Environment"
+        "title": "GPUs: Activate Environment"
       },
       {
         "command": "genv.config.gpus",
-        "title": "GPU: Configure Environment Device Count"
+        "title": "GPUs: Configure Environment Device Count"
       },
       {
         "command": "genv.config.name",
-        "title": "GPU: Configure Environment Name"
+        "title": "GPUs: Configure Environment Name"
       },
       {
         "command": "genv.attach",
-        "title": "GPU: Attach Devices"
+        "title": "GPUs: Attach Devices"
+      },
+      {
+        "command": "genv.detach",
+        "title": "GPUs: Detach Devices"
       },
       {
         "command": "genv.devices.refresh",

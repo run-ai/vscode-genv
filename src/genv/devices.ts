@@ -16,6 +16,10 @@ export async function attach(eid: number, count: number): Promise<string> {
   return await exec(`attach --eid ${eid} --count ${count}`);
 }
 
+export async function detach(eid: number) {
+  await exec(`detach --eid ${eid}`);
+}
+
 export async function ps(): Promise<Device[]>{
   const stdout = await exec("ps --format csv --no-header --timestamp");
   const lines = stdout.split('\n');

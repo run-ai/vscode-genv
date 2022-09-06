@@ -114,4 +114,24 @@ export async function activate(context: vscode.ExtensionContext) {
       }
     }
   }));
+
+  context.subscriptions.push(vscode.commands.registerCommand('genv.detach', async () => {
+    if (environment.activated()) {
+      if (environment.attacahed()) {
+        await environment.detach();
+
+        for (let terminal of vscode.window.terminals) {
+          terminal.sendText('genv attach --refresh');
+        }
+
+        statusBarItem.command = 'genv.attach';
+        statusBarItem.tooltip = 'This environment is not attached to any GPU';
+        statusBarItem.text = 'No GPUs';
+
+        vscode.commands.executeCommand('genv.devices.refresh');
+      }
+    } else {
+      vscode.window.showWarningMessage('Not running in an activated GPU environment');
+    }
+  }));
 }

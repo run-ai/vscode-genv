@@ -33,6 +33,10 @@ export function indices(): number[] {
 	return state.indices;
 }
 
+export function attacahed(): boolean {
+	return state.indices.length > 0;
+}
+
 // TODO(raz): support deactivating
 export async function activate() {
 	if (!state.activated) {
@@ -52,10 +56,16 @@ export async function configName(name: string) {
   state.config.name = name;
 }
 
-// TODO(raz): support detaching
 export async function attach() {
-  if (state.config.gpus) {
-    const stdout = await devices.attach(eid, state.config.gpus);
-	  state.indices = stdout.split(',').map(Number);
-  }
+	if (state.config.gpus) {
+		const stdout = await devices.attach(eid, state.config.gpus);
+		state.indices = stdout.split(',').map(Number);
+	}
+}
+
+export async function detach() {
+	if (attacahed()) {
+		await devices.detach(eid);
+		state.indices = [];
+	}
 }
