@@ -49,11 +49,11 @@ export async function activate(context: vscode.ExtensionContext) {
       await environment.configName(`vscode/${vscode.workspace.name}`);
 
       for (let terminal of vscode.window.terminals) {
-        terminal.sendText(`genv activate --id ${environment.eid}`);
+        terminal.sendText(`genv activate --id ${environment.eid} --no-load --no-attach`);
       }
 
       context.subscriptions.push(vscode.window.onDidOpenTerminal(terminal => {
-        terminal.sendText(`genv activate --id ${environment.eid}`);
+        terminal.sendText(`genv activate --id ${environment.eid} --no-load --no-attach`);
       }));
 
       statusBarItem.show();
