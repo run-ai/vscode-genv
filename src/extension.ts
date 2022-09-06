@@ -8,19 +8,19 @@ let statusBarItem: vscode.StatusBarItem;
 export async function activate(context: vscode.ExtensionContext) {
   const devicesProvider = new DevicesProvider();
 
-  context.subscriptions.push(vscode.window.registerTreeDataProvider('vscode-genv.devices', devicesProvider));
-  context.subscriptions.push(vscode.commands.registerCommand('vscode-genv.devices.refresh', () => {
+  context.subscriptions.push(vscode.window.registerTreeDataProvider('genv.devices', devicesProvider));
+  context.subscriptions.push(vscode.commands.registerCommand('genv.devices.refresh', () => {
     devicesProvider.refresh();
 	}));
 
   const envsProvider = new EnvsProvider();
 
-	context.subscriptions.push(vscode.window.registerTreeDataProvider('vscode-genv.envs', envsProvider));
-	context.subscriptions.push(vscode.commands.registerCommand('vscode-genv.envs.refresh', () => {
+	context.subscriptions.push(vscode.window.registerTreeDataProvider('genv.envs', envsProvider));
+	context.subscriptions.push(vscode.commands.registerCommand('genv.envs.refresh', () => {
 		envsProvider.refresh();
   }));
 
-  context.subscriptions.push(vscode.commands.registerCommand('vscode-genv.activate', async () => {
+  context.subscriptions.push(vscode.commands.registerCommand('genv.activate', async () => {
     if (environment.activated()) {
       vscode.window.showWarningMessage('Already running in an activated GPU environment');
     } else {
@@ -36,17 +36,17 @@ export async function activate(context: vscode.ExtensionContext) {
       }));
 
       statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-      statusBarItem.command = 'vscode-genv.attach';
+      statusBarItem.command = 'genv.attach';
       statusBarItem.tooltip = 'This environment is not attached to any GPU';
       statusBarItem.text = 'No GPUs';
       statusBarItem.show();
       context.subscriptions.push(statusBarItem);
 
-      vscode.commands.executeCommand('vscode-genv.envs.refresh');
+      vscode.commands.executeCommand('genv.envs.refresh');
     }
   }));
 
-  context.subscriptions.push(vscode.commands.registerCommand('vscode-genv.config.gpus', async () => {
+  context.subscriptions.push(vscode.commands.registerCommand('genv.config.gpus', async () => {
     if (environment.activated()) {
       const input: string | undefined = await vscode.window.showInputBox({
         placeHolder: 'Enter GPU count for the environment',
@@ -71,7 +71,7 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   }));
 
-  context.subscriptions.push(vscode.commands.registerCommand('vscode-genv.config.name', async () => {
+  context.subscriptions.push(vscode.commands.registerCommand('genv.config.name', async () => {
     if (environment.activated()) {
       const name: string | undefined = await vscode.window.showInputBox({
         placeHolder: 'Enter name for the environment',
@@ -89,14 +89,14 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   }));
 
-  context.subscriptions.push(vscode.commands.registerCommand('vscode-genv.attach', async () => {
+  context.subscriptions.push(vscode.commands.registerCommand('genv.attach', async () => {
     if (!environment.activated()) {
-      await vscode.commands.executeCommand('vscode-genv.activate');
+      await vscode.commands.executeCommand('genv.activate');
     }
 
     if (environment.activated()) {
       if (environment.config().gpus === undefined) {
-        await vscode.commands.executeCommand('vscode-genv.config.gpus');
+        await vscode.commands.executeCommand('genv.config.gpus');
       }
 
       if (environment.config().gpus) {
@@ -110,7 +110,7 @@ export async function activate(context: vscode.ExtensionContext) {
         statusBarItem.tooltip = `This environment is attached to ${statusBarItem.text} at ${environment.indices()}`;
         statusBarItem.command = undefined;
 
-        vscode.commands.executeCommand('vscode-genv.devices.refresh');
+        vscode.commands.executeCommand('genv.devices.refresh');
       }
     }
   }));

@@ -10,39 +10,39 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:vscode-genv.activate",
-    "onCommand:vscode-genv.config.gpus",
-    "onCommand:vscode-genv.config.name",
-    "onCommand:vscode-genv.attach",
-    "onView:vscode-genv.devices",
-    "onView:vscode-genv.envs"
+    "onCommand:genv.activate",
+    "onCommand:genv.config.gpus",
+    "onCommand:genv.config.name",
+    "onCommand:genv.attach",
+    "onView:genv.devices",
+    "onView:genv.envs"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vscode-genv.activate",
+        "command": "genv.activate",
         "title": "GPU: Activate Environment"
       },
       {
-        "command": "vscode-genv.config.gpus",
+        "command": "genv.config.gpus",
         "title": "GPU: Configure Environment Device Count"
       },
       {
-        "command": "vscode-genv.config.name",
+        "command": "genv.config.name",
         "title": "GPU: Configure Environment Name"
       },
       {
-        "command": "vscode-genv.attach",
+        "command": "genv.attach",
         "title": "GPU: Attach Devices"
       },
       {
-        "command": "vscode-genv.devices.refresh",
+        "command": "genv.devices.refresh",
         "title": "Refresh",
         "icon": "$(refresh)"
       },
       {
-        "command": "vscode-genv.envs.refresh",
+        "command": "genv.envs.refresh",
         "title": "Refresh",
         "icon": "$(refresh)"
       }
@@ -50,13 +50,13 @@
     "menus": {
       "view/title": [
         {
-          "command": "vscode-genv.devices.refresh",
-          "when": "view == vscode-genv.devices",
+          "command": "genv.devices.refresh",
+          "when": "view == genv.devices",
           "group": "navigation"
         },
         {
-          "command": "vscode-genv.envs.refresh",
-          "when": "view == vscode-genv.envs",
+          "command": "genv.envs.refresh",
+          "when": "view == genv.envs",
           "group": "navigation"
         }
       ]
@@ -64,11 +64,11 @@
     "views": {
       "gpus": [
         {
-          "id": "vscode-genv.envs",
+          "id": "genv.envs",
           "name": "Environments"
         },
         {
-          "id": "vscode-genv.devices",
+          "id": "genv.devices",
           "name": "Devices"
         }
       ]
