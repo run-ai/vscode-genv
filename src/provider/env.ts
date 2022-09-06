@@ -37,7 +37,7 @@ export class EnvProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
         },
         environment.attacahed() ? {
           label: 'Attached',
-          description: `${environment.indices()}`,
+          description: `Using devices ${environment.indices()}`,
           tooltip: 'Click to detach the environment',
           command: {
             title: 'Detach Environment',

@@ -7,12 +7,25 @@ import { EnvsProvider } from './provider/envs';
 let statusBarItem: vscode.StatusBarItem;
 
 export async function activate(context: vscode.ExtensionContext) {
+  statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+  context.subscriptions.push(statusBarItem);
+
   const envProvider = new EnvProvider();
 
   context.subscriptions.push(vscode.window.registerTreeDataProvider('genv.env', envProvider));
   context.subscriptions.push(vscode.commands.registerCommand('genv.env.refresh', () => {
     envProvider.refresh();
-	}));
+
+    if (environment.attacahed()) {
+      statusBarItem.text = environment.config().gpus === 1 ? '1 GPU' : `${environment.config().gpus} GPUs`;
+      statusBarItem.tooltip = `Environment is attached to ${statusBarItem.text} at ${environment.indices()}`;
+      statusBarItem.command = { title: 'Reattach', command: 'genv.attach', arguments: [true] };
+    } else {
+      statusBarItem.command = 'genv.attach';
+      statusBarItem.tooltip = 'Environment is not attached to any GPU';
+      statusBarItem.text = 'No GPUs';
+    }
+}));
 
   const devicesProvider = new DevicesProvider();
 
@@ -43,12 +56,7 @@ export async function activate(context: vscode.ExtensionContext) {
         terminal.sendText(`genv activate --id ${environment.eid}`);
       }));
 
-      statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-      statusBarItem.command = 'genv.attach';
-      statusBarItem.tooltip = 'This environment is not attached to any GPU';
-      statusBarItem.text = 'No GPUs';
       statusBarItem.show();
-      context.subscriptions.push(statusBarItem);
 
       vscode.commands.executeCommand('genv.env.refresh');
       vscode.commands.executeCommand('genv.envs.refresh');
@@ -74,9 +82,11 @@ export async function activate(context: vscode.ExtensionContext) {
           terminal.sendText('genv config gpus --refresh');
         }
 
-        // TODO(raz): should we reattach here or at least suggest it to the user?
-
         vscode.commands.executeCommand('genv.env.refresh');
+
+        if (environment.attacahed()) {
+          vscode.commands.executeCommand('genv.attach');
+        }
       }
     } else {
       vscode.window.showErrorMessage('Not running in an activated GPU environment');
@@ -105,13 +115,13 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   }));
 
-  context.subscriptions.push(vscode.commands.registerCommand('genv.attach', async () => {
+  context.subscriptions.push(vscode.commands.registerCommand('genv.attach', async (reconfig: boolean=false) => {
     if (!environment.activated()) {
       await vscode.commands.executeCommand('genv.activate');
     }
 
     if (environment.activated()) {
-      if (environment.config().gpus === undefined) {
+      if (reconfig || environment.config().gpus === undefined) {
         await vscode.commands.executeCommand('genv.config.gpus');
       }
 
@@ -121,10 +131,6 @@ export async function activate(context: vscode.ExtensionContext) {
         for (let terminal of vscode.window.terminals) {
           terminal.sendText('genv attach --refresh');
         }
-
-        statusBarItem.text = environment.config().gpus === 1 ? '1 GPU' : `${environment.config().gpus} GPUs`;
-        statusBarItem.tooltip = `This environment is attached to ${statusBarItem.text} at ${environment.indices()}`;
-        statusBarItem.command = undefined;
 
         vscode.commands.executeCommand('genv.env.refresh');
         vscode.commands.executeCommand('genv.devices.refresh');
@@ -141,10 +147,6 @@ export async function activate(context: vscode.ExtensionContext) {
           for (let terminal of vscode.window.terminals) {
             terminal.sendText('genv attach --refresh');
           }
-
-          statusBarItem.command = 'genv.attach';
-          statusBarItem.tooltip = 'This environment is not attached to any GPU';
-          statusBarItem.text = 'No GPUs';
 
           vscode.commands.executeCommand('genv.env.refresh');
           vscode.commands.executeCommand('genv.devices.refresh');
