@@ -22,7 +22,7 @@ export async function detach(eid: number) {
 
 export async function ps(): Promise<Device[]>{
   const stdout = await exec("ps --format csv --no-header --timestamp");
-  const lines = stdout.split('\n');
+  const lines = stdout.split('\n').filter(line => line.length > 0);
 
   return lines.map(line => {
     const [ id, eid, envName, attached ] = line.split(',');
