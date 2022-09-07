@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import * as environment from '../environment';
+import * as environment from '../genv/env';
 
 export class EnvProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
 	getTreeItem(element: vscode.TreeItem): vscode.TreeItem {

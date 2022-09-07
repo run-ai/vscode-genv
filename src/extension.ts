@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import * as environment from './environment';
+import * as environment from './genv/env';
 import * as installation from './commands/installation';
 import { DevicesProvider } from './provider/devices';
 import { EnvProvider } from './provider/env';

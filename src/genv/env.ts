@@ -1,6 +1,6 @@
 import * as os from 'os';
-import * as devices from './genv/devices';
-import * as envs from './genv/envs';
+import * as devices from './devices';
+import * as envs from './envs';
 
 interface Config {
 	gpus?: number;
@@ -37,7 +37,6 @@ export function attacahed(): boolean {
 	return state.indices.length > 0;
 }
 
-// TODO(raz): support deactivating
 export async function activate() {
 	if (!state.activated) {
 		const info = os.userInfo();
@@ -47,13 +46,13 @@ export async function activate() {
 }
 
 export async function configGPUs(count: number) {
-  await envs.configGPUs(eid, count);
+	await envs.configGPUs(eid, count);
 	state.config.gpus = count;
 }
 
 export async function configName(name: string) {
-  await envs.configName(eid, name);
-  state.config.name = name;
+	await envs.configName(eid, name);
+	state.config.name = name;
 }
 
 export async function attach() {
