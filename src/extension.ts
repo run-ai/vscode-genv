@@ -126,7 +126,13 @@ export async function activate(context: vscode.ExtensionContext) {
       }
 
       if (environment.config().gpus) {
-        await environment.attach();
+
+        try {
+          await environment.attach();
+        } catch (error: any) {
+          vscode.window.showErrorMessage(`${error.stderr}`);
+          return;
+        }
 
         for (let terminal of vscode.window.terminals) {
           terminal.sendText('genv attach --refresh');
