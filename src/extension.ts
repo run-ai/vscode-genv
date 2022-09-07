@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as environment from './environment';
+import * as installation from './commands/installation';
 import { DevicesProvider } from './provider/devices';
 import { EnvProvider } from './provider/env';
 import { EnvsProvider } from './provider/envs';
@@ -7,6 +8,8 @@ import { EnvsProvider } from './provider/envs';
 let statusBarItem: vscode.StatusBarItem;
 
 export async function activate(context: vscode.ExtensionContext) {
+  installation.activate(context);
+
   statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
   context.subscriptions.push(statusBarItem);
 

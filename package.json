@@ -45,42 +45,82 @@
   "contributes": {
     "commands": [
       {
+        "command": "genv.installation.refresh",
+        "title": "Refresh Installation",
+        "category": "GPUs",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "genv.installation.install",
+        "title": "Download and Install genv",
+        "category": "GPUs",
+        "icon": "$(cloud-download)"
+      },
+      {
         "command": "genv.activate",
-        "title": "GPUs: Activate Environment"
+        "title": "Activate Environment",
+        "category": "GPUs"
       },
       {
         "command": "genv.config.gpus",
-        "title": "GPUs: Configure Environment Device Count"
+        "title": "Configure Environment Device Count",
+        "category": "GPUs"
       },
       {
         "command": "genv.config.name",
-        "title": "GPUs: Configure Environment Name"
+        "title": "Configure Environment Name",
+        "category": "GPUs"
       },
       {
         "command": "genv.attach",
-        "title": "GPUs: Attach Devices"
+        "title": "Attach Environment to Devices",
+        "category": "GPUs"
       },
       {
         "command": "genv.detach",
-        "title": "GPUs: Detach Devices"
+        "title": "Detach Environment from Devices",
+        "category": "GPUs"
       },
       {
         "command": "genv.env.refresh",
-        "title": "Refresh"
+        "title": "Refresh Active Environment",
+        "category": "GPUs"
       },
       {
         "command": "genv.devices.refresh",
-        "title": "Refresh",
+        "title": "Refresh Devices",
+        "category": "GPUs",
         "icon": "$(refresh)"
       },
       {
         "command": "genv.envs.refresh",
-        "title": "Refresh",
+        "title": "Refresh Environments",
+        "category": "GPUs",
         "icon": "$(refresh)"
       }
     ],
     "menus": {
+      "commandPalette": [
+        {
+          "command": "genv.installation.refresh",
+          "when": "genv.installation.uninstalled"
+        },
+        {
+          "command": "genv.installation.install",
+          "when": "genv.installation.uninstalled"
+        }
+      ],
       "view/title": [
+        {
+          "command": "genv.installation.refresh",
+          "when": "view == genv.env && genv.installation.uninstalled",
+          "group": "navigation"
+        },
+        {
+          "command": "genv.installation.install",
+          "when": "view == genv.env && genv.installation.uninstalled",
+          "group": "navigation"
+        },
         {
           "command": "genv.devices.refresh",
           "when": "view == genv.devices",
@@ -101,11 +141,13 @@
         },
         {
           "id": "genv.envs",
-          "name": "Environments"
+          "name": "Environments",
+          "when": "genv.installation.installed"
         },
         {
           "id": "genv.devices",
-          "name": "Devices"
+          "name": "Devices",
+          "when": "genv.installation.installed"
         }
       ]
     },
@@ -121,7 +163,13 @@
     "viewsWelcome": [
       {
         "view": "genv.env",
-        "contents": "GPU environment is not activated [learn more](https://github.com/run-ai/genv).\n[Activate Environment](command:genv.activate)"
+        "contents": "Seems like genv is not installed [learn more](https://github.com/run-ai/genv#readme).\n[Install](command:genv.installation.install)",
+        "when": "genv.installation.uninstalled"
+      },
+      {
+        "view": "genv.env",
+        "contents": "GPU environment is not activated [learn more](https://github.com/run-ai/genv#readme).\n[Activate Environment](command:genv.activate)",
+        "when": "genv.installation.installed"
       }
     ]
   },
