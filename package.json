@@ -1,13 +1,36 @@
 {
   "name": "vscode-genv",
-  "displayName": "vscode-genv",
-  "description": "Visual Studio Code extension for genv",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "displayName": "GPU Environments",
+  "description": "Lets you interactively control, configure and monitor the GPU resources that you are using.",
   "engines": {
     "vscode": "^1.70.0"
   },
+  "homepage": "https://github.com/run-ai/vscode-genv",
+  "license": "SEE LICENSE IN LICENSE",
+  "author": {
+    "name": "Raz Rotenberg",
+    "email": "raz.rotenberg@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/run-ai/vscode-genv.git"
+  },
+  "bugs": {
+    "url": "https://github.com/run-ai/vscode-genv/issues",
+    "email": "raz.rotenberg@gmail.com"
+  },
+  "qna": "https://github.com/run-ai/vscode-genv/issues",
   "categories": [
+    "Machine Learning",
+    "Data Science",
     "Other"
+  ],
+  "keywords": [
+    "gpu",
+    "gpus",
+    "nvidia",
+    "conda"
   ],
   "activationEvents": [
     "onCommand:genv.activate",
