@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as devices from '../genv/devices';
+import * as env from '../genv/env';
 
 export class Provider implements vscode.TreeDataProvider<Device> {
   getTreeItem(element: Device): vscode.TreeItem {
@@ -33,6 +34,14 @@ class Device extends vscode.TreeItem {
     if (device.eid) {
       this.description = `${device.eid}`;
       this.tooltip = `Attached ${device.attached!.format('MMM D, YYYY hh:mm:ss')}`;
+
+      if (device.eid === env.eid) {
+        this.iconPath = new vscode.ThemeIcon('circle-large-filled', new vscode.ThemeColor('debugIcon.startForeground'));
+      } else {
+        this.iconPath = new vscode.ThemeIcon('circle-large-filled', new vscode.ThemeColor('debugIcon.stopForeground'));
+      }
+    } else {
+      this.iconPath = new vscode.ThemeIcon('circle-large-outline');
     }
   }
 }

@@ -169,11 +169,6 @@
           "group": "inline"
         },
         {
-          "command": "genv.env.config.gpus",
-          "when": "view == genv.env && viewItem == gpus",
-          "group": "inline"
-        },
-        {
           "command": "genv.env.attach",
           "when": "view == genv.env && viewItem == detached",
           "group": "inline"

@@ -18,22 +18,23 @@ export class Provider implements vscode.TreeDataProvider<vscode.TreeItem> {
 		if (environment.activated()) {
 			return [
         {
-          label: 'Name',
-          description: environment.config().name,
-          contextValue: 'name'
-        },
-        {
-          label: 'Device Count',
-          description: environment.config().gpus ? `${environment.config().gpus}` : undefined,
-          contextValue: 'gpus',
+          label: environment.config().name,
+          contextValue: 'name',
+		  iconPath: new vscode.ThemeIcon('megaphone'),
         },
         environment.attacahed() ? {
           label: 'Attached',
           description: `to devices ${environment.indices()}`,
           contextValue: 'attached',
+		  iconPath: new vscode.ThemeIcon('check', new vscode.ThemeColor('debugIcon.startForeground')),
         } : {
           label: 'Detached',
           contextValue: 'detached',
+		  iconPath: new vscode.ThemeIcon('debug-pause', new vscode.ThemeColor('debugIcon.stopForeground')),
+		  command: {
+			"title": "Attach Environment to Devices",
+			"command": "genv.env.attach"
+		  }
         },
       ];
 		} else {
