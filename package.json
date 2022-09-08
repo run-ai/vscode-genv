@@ -33,13 +33,16 @@
     "conda"
   ],
   "activationEvents": [
+    "onCommand:genv.installation.refresh",
+    "onCommand:genv.installation.install",
     "onCommand:genv.env.activate",
-    "onCommand:genv.env.config.gpus",
-    "onCommand:genv.env.config.name",
     "onCommand:genv.env.attach",
+    "onCommand:genv.devices.refresh",
+    "onCommand:genv.envs.refresh",
     "onView:genv.env",
     "onView:genv.devices",
-    "onView:genv.envs"
+    "onView:genv.envs",
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -82,11 +85,6 @@
         "category": "GPUs"
       },
       {
-        "command": "genv.env.refresh",
-        "title": "Refresh Active Environment",
-        "category": "GPUs"
-      },
-      {
         "command": "genv.devices.refresh",
         "title": "Refresh Devices",
         "category": "GPUs",
@@ -108,6 +106,34 @@
         {
           "command": "genv.installation.install",
           "when": "genv.installation.uninstalled"
+        },
+        {
+          "command": "genv.env.activate",
+          "when": "genv.installation.installed && !genv.env.activated"
+        },
+        {
+          "command": "genv.env.config.gpus",
+          "when": "genv.env.activated"
+        },
+        {
+          "command": "genv.env.config.name",
+          "when": "genv.env.activated"
+        },
+        {
+          "command": "genv.env.attach",
+          "when": "genv.installation.installed"
+        },
+        {
+          "command": "genv.env.detach",
+          "when": "genv.env.activated"
+        },
+        {
+          "command": "genv.devices.refresh",
+          "when": "genv.installation.installed"
+        },
+        {
+          "command": "genv.envs.refresh",
+          "when": "genv.installation.installed"
         }
       ],
       "view/title": [

@@ -18,7 +18,6 @@ export function init(context: vscode.ExtensionContext) {
     statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
     context.subscriptions.push(statusBarItem);
 
-    context.subscriptions.push(vscode.commands.registerCommand('genv.env.refresh', refresh));
     context.subscriptions.push(vscode.commands.registerCommand('genv.env.activate', activate));
     context.subscriptions.push(vscode.commands.registerCommand('genv.env.attach', attach));
     context.subscriptions.push(vscode.commands.registerCommand('genv.env.detach', detach));
@@ -64,6 +63,7 @@ async function activate() {
         refresh();
 
         vscode.commands.executeCommand('genv.envs.refresh');
+        vscode.commands.executeCommand('setContext', 'genv.env.activated', true);
     }
 }
 
