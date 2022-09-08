@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as environment from '../genv/env';
 
-export class EnvProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
+export class Provider implements vscode.TreeDataProvider<vscode.TreeItem> {
 	getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
 		return element;
 	}
@@ -23,7 +23,7 @@ export class EnvProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
           tooltip: 'Click to configure the environment name',
           command: {
             title: 'Configure Environment Name',
-            command: 'genv.config.name',
+            command: 'genv.env.config.name',
           },
         },
         {
@@ -32,7 +32,7 @@ export class EnvProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
           tooltip: 'Click to configure the environment device count',
           command: {
             title: 'Configure Environment Device Count',
-            command: 'genv.config.gpus',
+            command: 'genv.env.config.gpus',
           },
         },
         environment.attacahed() ? {
@@ -41,14 +41,14 @@ export class EnvProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
           tooltip: 'Click to detach the environment',
           command: {
             title: 'Detach Environment',
-            command: 'genv.detach',
+            command: 'genv.env.detach',
           },
         } : {
           label: 'Detached',
           tooltip: 'Click to attach the environment',
           command: {
             title: 'Attach Environment',
-            command: 'genv.attach',
+            command: 'genv.env.attach',
           },
         },
       ];

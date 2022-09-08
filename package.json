@@ -33,10 +33,10 @@
     "conda"
   ],
   "activationEvents": [
-    "onCommand:genv.activate",
-    "onCommand:genv.config.gpus",
-    "onCommand:genv.config.name",
-    "onCommand:genv.attach",
+    "onCommand:genv.env.activate",
+    "onCommand:genv.env.config.gpus",
+    "onCommand:genv.env.config.name",
+    "onCommand:genv.env.attach",
     "onView:genv.env",
     "onView:genv.devices",
     "onView:genv.envs"
@@ -57,27 +57,27 @@
         "icon": "$(cloud-download)"
       },
       {
-        "command": "genv.activate",
+        "command": "genv.env.activate",
         "title": "Activate Environment",
         "category": "GPUs"
       },
       {
-        "command": "genv.config.gpus",
+        "command": "genv.env.config.gpus",
         "title": "Configure Environment Device Count",
         "category": "GPUs"
       },
       {
-        "command": "genv.config.name",
+        "command": "genv.env.config.name",
         "title": "Configure Environment Name",
         "category": "GPUs"
       },
       {
-        "command": "genv.attach",
+        "command": "genv.env.attach",
         "title": "Attach Environment to Devices",
         "category": "GPUs"
       },
       {
-        "command": "genv.detach",
+        "command": "genv.env.detach",
         "title": "Detach Environment from Devices",
         "category": "GPUs"
       },
@@ -168,7 +168,7 @@
       },
       {
         "view": "genv.env",
-        "contents": "GPU environment is not activated [learn more](https://github.com/run-ai/genv#readme).\n[Activate Environment](command:genv.activate)",
+        "contents": "GPU environment is not activated [learn more](https://github.com/run-ai/genv#readme).\n[Activate Environment](command:genv.env.activate)",
         "when": "genv.installation.installed"
       }
     ]

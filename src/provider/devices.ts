@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as devices from '../genv/devices';
 
-export class DevicesProvider implements vscode.TreeDataProvider<Device> {
+export class Provider implements vscode.TreeDataProvider<Device> {
   getTreeItem(element: Device): vscode.TreeItem {
     return element;
   }
