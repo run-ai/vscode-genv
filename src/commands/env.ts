@@ -76,13 +76,13 @@ async function activate() {
  *
  * @param reconfig - Reconfigure the environment
  */
-async function attach(reconfig: boolean=false) {
+async function attach(reconfig: boolean | any=false) {
     if (!env.activated()) {
         await activate();
     }
 
     if (env.activated()) {
-        if (reconfig || env.config().gpus === undefined) {
+        if (reconfig === true || env.config().gpus === undefined) {
             await configGPUs();
         }
 

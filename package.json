@@ -67,22 +67,26 @@
       {
         "command": "genv.env.config.gpus",
         "title": "Configure Environment Device Count",
-        "category": "GPUs"
+        "category": "GPUs",
+        "icon": "$(edit)"
       },
       {
         "command": "genv.env.config.name",
         "title": "Configure Environment Name",
-        "category": "GPUs"
+        "category": "GPUs",
+        "icon": "$(edit)"
       },
       {
         "command": "genv.env.attach",
         "title": "Attach Environment to Devices",
-        "category": "GPUs"
+        "category": "GPUs",
+        "icon": "$(play-circle)"
       },
       {
         "command": "genv.env.detach",
         "title": "Detach Environment from Devices",
-        "category": "GPUs"
+        "category": "GPUs",
+        "icon": "$(stop-circle)"
       },
       {
         "command": "genv.devices.refresh",
@@ -156,6 +160,28 @@
           "command": "genv.envs.refresh",
           "when": "view == genv.envs",
           "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "genv.env.config.name",
+          "when": "view == genv.env && viewItem == name",
+          "group": "inline"
+        },
+        {
+          "command": "genv.env.config.gpus",
+          "when": "view == genv.env && viewItem == gpus",
+          "group": "inline"
+        },
+        {
+          "command": "genv.env.attach",
+          "when": "view == genv.env && viewItem == detached",
+          "group": "inline"
+        },
+        {
+          "command": "genv.env.detach",
+          "when": "view == genv.env && viewItem == attached",
+          "group": "inline"
         }
       ]
     },
