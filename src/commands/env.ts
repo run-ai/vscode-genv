@@ -21,6 +21,8 @@ export function init(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('genv.env.activate', activate));
     context.subscriptions.push(vscode.commands.registerCommand('genv.env.attach', attach));
     context.subscriptions.push(vscode.commands.registerCommand('genv.env.detach', detach));
+    context.subscriptions.push(vscode.commands.registerCommand('genv.env.attachDevice', attachDevice));
+    context.subscriptions.push(vscode.commands.registerCommand('genv.env.detachDevice', detachDevice));
     context.subscriptions.push(vscode.commands.registerCommand('genv.env.config.gpus', configGPUs));
     context.subscriptions.push(vscode.commands.registerCommand('genv.env.config.name', configName));
 
@@ -34,11 +36,13 @@ function refresh() {
     provider.refresh();
 
     if (env.attacahed()) {
-        statusBarItem.text = env.config().gpus === 1 ? '1 GPU' : `${env.config().gpus} GPUs`;
+        const count = env.indices().length;
+
+        statusBarItem.text = count === 1 ? '1 GPU' : `${count} GPUs`;
         statusBarItem.tooltip = `Environment is attached to ${statusBarItem.text} at ${env.indices()}`;
         statusBarItem.command = { title: 'Reattach', command: 'genv.env.attach', arguments: [true] };
     } else {
-        statusBarItem.command = 'genv.env.attach';
+        statusBarItem.command = { title: 'Attach', command: 'genv.env.attach', arguments: [true] };
         statusBarItem.tooltip = 'Environment is not attached to any GPU';
         statusBarItem.text = 'No GPUs';
     }
@@ -81,27 +85,28 @@ async function attach(reconfig: boolean | any=false) {
         await activate();
     }
 
-    if (env.activated()) {
-        if (reconfig === true || env.config().gpus === undefined) {
-            await configGPUs();
+    if (reconfig === true || env.config().gpus === undefined) {
+        if (!await configGPUs(false)) {
+            return;
         }
+    }
 
-        if (env.config().gpus) {
-            try {
-                await env.attach();
-            } catch (error: any) {
-                vscode.window.showErrorMessage(`${error.stderr}`);
-                return;
-            }
-
-            for (let terminal of vscode.window.terminals) {
-                terminal.sendText('genv attach --refresh');
-            }
-
-            refresh();
-
+    if (env.config().gpus) {
+        try {
+            await env.attach();
+        } catch (error: any) {
+            vscode.window.showErrorMessage(`${error.stderr}`);
             vscode.commands.executeCommand('genv.devices.refresh');
+            return;
         }
+
+        for (let terminal of vscode.window.terminals) {
+            terminal.sendText('genv attach --refresh');
+        }
+
+        refresh();
+
+        vscode.commands.executeCommand('genv.devices.refresh');
     }
 }
 
@@ -132,16 +137,76 @@ async function detach() {
 }
 
 /**
+ * Attach the environment to a device.
+ *
+ * Activates the environment if not already active.
+ * Configures the environment device count if not already configured, or if explicitly requested.
+ * Refreshes all open terminals and the environment and devices views.
+ */
+ async function attachDevice(treeItem: vscode.TreeItem) {
+    if (!env.activated()) {
+        await activate();
+    }
+
+    const match = (treeItem.label as string).match(/GPU\ (\d+)/);
+    if (match) {
+        const index = Number(match[1]);
+
+        try {
+            await env.attachDevice(index);
+        } catch (error: any) {
+            vscode.window.showErrorMessage(`${error.stderr}`);
+            vscode.commands.executeCommand('genv.devices.refresh');
+            return;
+        }
+
+        for (let terminal of vscode.window.terminals) {
+            terminal.sendText('genv attach --refresh');
+        }
+
+        refresh();
+
+        vscode.commands.executeCommand('genv.devices.refresh');
+    }
+}
+
+/**
+ * Detaches the active environment from a device.
+ *
+ * Refreshes all open terminals and the environment and devices views.
+ */
+ async function detachDevice(treeItem: vscode.TreeItem) {
+    if (env.activated()) {
+        const match = (treeItem.label as string).match(/GPU\ (\d+)/);
+        if (match) {
+            const index = Number(match[1]);
+
+            await env.detachDevice(index);
+
+            for (let terminal of vscode.window.terminals) {
+                terminal.sendText('genv attach --refresh');
+            }
+
+            refresh();
+
+            vscode.commands.executeCommand('genv.devices.refresh');
+        }
+    }
+}
+
+/**
  * Configures the active environment device count.
  *
  * Refreshes all open terminals and the environment.
  * Reattaches to devices if already attached.
+ *
+ * @param reattach - Reattach the environment if already attached
  */
-async function configGPUs() {
+async function configGPUs(reattach: boolean=true): Promise<boolean> {
     if (env.activated()) {
         const input: string | undefined = await vscode.window.showInputBox({
             placeHolder: 'Enter GPU count for the environment',
-            value: env.config().gpus ? `${env.config().gpus}` : undefined,
+            value: env.attacahed() ? `${env.indices().length}` : undefined,
             validateInput: function(input: string): string | undefined {
                 return /^([1-9]\d*)?$/.test(input) ? undefined : 'Must be an integer grather than 0';
             }
@@ -158,13 +223,17 @@ async function configGPUs() {
 
             refresh();
 
-            if (env.attacahed()) {
+            if (env.attacahed() && reattach === true) {
                 await attach();
             }
+
+            return true;
         }
     } else {
         vscode.window.showErrorMessage('Not running in an activated GPU environment');
     }
+
+    return false;
 }
 
 /**

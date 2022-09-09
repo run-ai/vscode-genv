@@ -20,6 +20,14 @@ export async function detach(eid: number) {
   await exec(`detach --eid ${eid}`);
 }
 
+export async function attachDevice(eid: number, index: number): Promise<string> {
+  return await exec(`attach --eid ${eid} --index ${index}`);
+}
+
+export async function detachDevice(eid: number, index: number): Promise<string> {
+  return await exec(`detach --eid ${eid} --index ${index}`);
+}
+
 export async function ps(): Promise<Device[]>{
   const stdout = await exec("ps --format csv --no-header --timestamp");
   const lines = stdout.split('\n').filter(line => line.length > 0);

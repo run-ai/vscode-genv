@@ -68,3 +68,18 @@ export async function detach() {
 		state.indices = [];
 	}
 }
+
+export async function attachDevice(index: number) {
+	const stdout = await devices.attachDevice(eid, index);
+	state.indices = stdout.split(',').map(Number);
+}
+
+export async function detachDevice(index: number) {
+	const stdout = await devices.detachDevice(eid, index);
+
+	if (stdout) {
+		state.indices = stdout.split(',').map(Number);
+	} else {
+		state.indices = [];
+	}
+}

@@ -89,6 +89,18 @@
         "icon": "$(stop-circle)"
       },
       {
+        "command": "genv.env.attachDevice",
+        "title": "Attach Environment to Device",
+        "category": "GPUs",
+        "icon": "$(add)"
+      },
+      {
+        "command": "genv.env.detachDevice",
+        "title": "Detach Environment from Device",
+        "category": "GPUs",
+        "icon": "$(remove)"
+      },
+      {
         "command": "genv.devices.refresh",
         "title": "Refresh Devices",
         "category": "GPUs",
@@ -130,6 +142,14 @@
         {
           "command": "genv.env.detach",
           "when": "genv.env.activated"
+        },
+        {
+          "command": "genv.env.attachDevice",
+          "when": "false"
+        },
+        {
+          "command": "genv.env.detachDevice",
+          "when": "false"
         },
         {
           "command": "genv.devices.refresh",
@@ -176,6 +196,16 @@
         {
           "command": "genv.env.detach",
           "when": "view == genv.env && viewItem == attached",
+          "group": "inline"
+        },
+        {
+          "command": "genv.env.attachDevice",
+          "when": "view == genv.devices && viewItem == attach",
+          "group": "inline"
+        },
+        {
+          "command": "genv.env.detachDevice",
+          "when": "view == genv.devices && viewItem == detach",
           "group": "inline"
         }
       ]
