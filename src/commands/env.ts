@@ -35,7 +35,7 @@ export function init(context: vscode.ExtensionContext) {
 function refresh() {
     provider.refresh();
 
-    if (env.attacahed()) {
+    if (env.attached()) {
         const count = env.indices().length;
 
         statusBarItem.text = count === 1 ? '1 GPU' : `${count} GPUs`;
@@ -118,7 +118,7 @@ async function attach(reconfig: boolean | any=false) {
  */
 async function detach() {
     if (env.activated()) {
-        if (env.attacahed()) {
+        if (env.attached()) {
             if (await vscode.window.showQuickPick(['No', 'Yes'], { placeHolder: 'Are you sure you want to detach the environment from GPUs?' }) === 'Yes') {
                 await env.detach();
 
@@ -206,7 +206,7 @@ async function configGPUs(reattach: boolean=true): Promise<boolean> {
     if (env.activated()) {
         const input: string | undefined = await vscode.window.showInputBox({
             placeHolder: 'Enter GPU count for the environment',
-            value: env.attacahed() ? `${env.indices().length}` : undefined,
+            value: env.attached() ? `${env.indices().length}` : undefined,
             validateInput: function(input: string): string | undefined {
                 return /^([1-9]\d*)?$/.test(input) ? undefined : 'Must be an integer grather than 0';
             }
@@ -223,7 +223,7 @@ async function configGPUs(reattach: boolean=true): Promise<boolean> {
 
             refresh();
 
-            if (env.attacahed() && reattach === true) {
+            if (env.attached() && reattach === true) {
                 await attach();
             }
 

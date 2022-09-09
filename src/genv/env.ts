@@ -33,7 +33,7 @@ export function indices(): number[] {
 	return state.indices;
 }
 
-export function attacahed(): boolean {
+export function attached(): boolean {
 	return state.indices.length > 0;
 }
 
@@ -63,7 +63,7 @@ export async function attach() {
 }
 
 export async function detach() {
-	if (attacahed()) {
+	if (attached()) {
 		await devices.detach(eid);
 		state.indices = [];
 	}

@@ -22,7 +22,7 @@ export class Provider implements vscode.TreeDataProvider<vscode.TreeItem> {
           contextValue: 'name',
 		  iconPath: new vscode.ThemeIcon('megaphone'),
         },
-        environment.attacahed() ? {
+        environment.attached() ? {
           label: 'Attached',
           description: `to devices ${environment.indices()}`,
           contextValue: 'attached',
