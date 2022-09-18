@@ -19,7 +19,7 @@ let state: State = {
 	indices: [],
 };
 
-export const eid: number = process.pid;
+export const eid: string = `${process.pid}`;
 
 export function activated(): boolean {
 	return state.activated;

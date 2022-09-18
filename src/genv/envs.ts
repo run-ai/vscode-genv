@@ -2,7 +2,7 @@ import * as control from './control';
 import * as moment from 'moment';
 
 export interface Env {
-  eid: number;
+  eid: string;
   user: string;
   name?: string;
   created: moment.Moment;
@@ -13,15 +13,15 @@ function exec(command: string): Promise<string> {
   return control.exec(`exec envs ${command}`);
 }
 
-export async function activate(pid: number, eid: number, uid: number, username: string): Promise<void> {
+export async function activate(pid: number, eid: string, uid: number, username: string): Promise<void> {
   await exec(`activate --pid ${pid} --eid ${eid} --uid ${uid} --username ${username}`);
 }
 
-export async function configName(eid: number, name: string): Promise<void> {
+export async function configName(eid: string, name: string): Promise<void> {
   await exec(`config --eid ${eid} name --name "${name}"`);
 }
 
-export async function configGPUs(eid: number, count: number): Promise<void> {
+export async function configGPUs(eid: string, count: number): Promise<void> {
   await exec(`config --eid ${eid} gpus --count ${count}`);
 }
 
@@ -32,7 +32,7 @@ export async function ps(): Promise<Env[]>{
   return lines.map(line => {
     const [ eid, user, name, created, pids ] = line.split(',');
     return {
-      eid: Number(eid),
+      eid: eid,
       user: user,
       name: name ? name : undefined,
       created: moment(created, 'DD/MM/YYYY hh:mm:ss'),
