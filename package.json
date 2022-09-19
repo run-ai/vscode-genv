@@ -1,8 +1,10 @@
 {
   "name": "vscode-genv",
+  "publisher": "run-ai",
   "version": "0.1.0",
   "displayName": "GPU Environments",
   "description": "Lets you interactively control, configure and monitor the GPU resources that you are using.",
+  "icon": "resources/genv.png",
   "engines": {
     "vscode": "^1.70.0"
   },
@@ -214,7 +216,7 @@
       "gpus": [
         {
           "id": "genv.env",
-          "name": "Active"
+          "name": "Active Environment"
         },
         {
           "id": "genv.envs",
@@ -252,6 +254,8 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
+    "package": "vsce package",
+    "publish": "vsce publish",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
@@ -269,7 +273,8 @@
     "eslint": "^8.20.0",
     "glob": "^8.0.3",
     "mocha": "^10.0.0",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "vsce": "^2.11.0"
   },
   "dependencies": {
     "moment": "^2.29.4"
