@@ -12,6 +12,9 @@ With _genv_ you could:
 ## Getting Started
 Read the _genv_ [reference](https://github.com/run-ai/genv#usage) to get started.
 
+## Installation
+From the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=run-ai.vscode-genv).
+
 ## Features
 ### Setting the Device Count
 You can configure how many GPUs you need just by clicking the status bar item.
@@ -27,3 +30,22 @@ In addition to automatically provisioning GPUs based on the configured device co
 You can switch between GPUs easily by selecting them in the device view.
 
 ![Choose GPUs](/resources/readme/selectdevices.gif)
+
+## Development
+### Publish
+Bump the version.
+You can use [`npm-version`](https://docs.npmjs.com/cli/v8/commands/npm-version).
+For example:
+```
+npm version patch
+```
+
+Package the extension using:
+```
+npm run package
+```
+
+Publish the extension using:
+```
+npm run publish
+```
