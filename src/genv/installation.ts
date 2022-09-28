@@ -3,6 +3,10 @@ import * as path from 'path';
 import * as cp from '../utils/cp';
 
 export function root(): string {
+  if (process.env.GENV_ROOT) {
+    return process.env.GENV_ROOT;
+  }
+
   return path.join(process.env.HOME!, 'genv');
 }
 
