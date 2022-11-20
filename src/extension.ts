@@ -3,12 +3,14 @@ import * as installation from './commands/installation';
 import * as env from './commands/env';
 import * as envs from './commands/envs';
 import * as devices from './commands/devices';
+import * as system from './commands/system';
 
 export async function activate(context: vscode.ExtensionContext) {
   installation.init(context);
   env.init(context);
   envs.init(context);
   devices.init(context);
+  system.init(context);
 
   // TODO(raz): make auto refresh configurable
   autoRefresh(context);

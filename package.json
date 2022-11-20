@@ -1,7 +1,7 @@
 {
   "name": "vscode-genv",
   "publisher": "run-ai",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "displayName": "GPU Environments",
   "description": "Lets you interactively control, configure and monitor the GPU resources that you are using.",
   "icon": "resources/genv.png",
@@ -29,6 +29,7 @@
     "Other"
   ],
   "keywords": [
+    "genv",
     "gpu",
     "gpus",
     "nvidia",
@@ -41,9 +42,11 @@
     "onCommand:genv.env.attach",
     "onCommand:genv.devices.refresh",
     "onCommand:genv.envs.refresh",
+    "onCommand:genv.system.refresh",
     "onView:genv.env",
     "onView:genv.devices",
     "onView:genv.envs",
+    "onView:genv.system",
     "onStartupFinished"
   ],
   "main": "./out/extension.js",
@@ -113,6 +116,12 @@
         "title": "Refresh Environments",
         "category": "GPUs",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "genv.system.refresh",
+        "title": "Refresh System Information",
+        "category": "GPUs",
+        "icon": "$(refresh)"
       }
     ],
     "menus": {
@@ -160,6 +169,9 @@
         {
           "command": "genv.envs.refresh",
           "when": "genv.installation.installed"
+        },
+        {
+          "command": "genv.system.refresh"
         }
       ],
       "view/title": [
@@ -181,6 +193,11 @@
         {
           "command": "genv.envs.refresh",
           "when": "view == genv.envs",
+          "group": "navigation"
+        },
+        {
+          "command": "genv.system.refresh",
+          "when": "view == genv.system",
           "group": "navigation"
         }
       ],
@@ -227,6 +244,10 @@
           "id": "genv.devices",
           "name": "Devices",
           "when": "genv.installation.installed"
+        },
+        {
+          "id": "genv.system",
+          "name": "System"
         }
       ]
     },
