@@ -25,6 +25,7 @@ export class Provider implements vscode.TreeDataProvider<vscode.TreeItem> {
       },
       {
         label: `Device Count: ${await nvidia_smi.deviceCount()} GPUs`,
+        tooltip: await nvidia_smi.productName(),
       },
     ];
   }
