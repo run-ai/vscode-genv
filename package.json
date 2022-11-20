@@ -41,9 +41,11 @@
     "onCommand:genv.env.attach",
     "onCommand:genv.devices.refresh",
     "onCommand:genv.envs.refresh",
+    "onCommand:genv.system.refresh",
     "onView:genv.env",
     "onView:genv.devices",
     "onView:genv.envs",
+    "onView:genv.system",
     "onStartupFinished"
   ],
   "main": "./out/extension.js",
@@ -113,6 +115,12 @@
         "title": "Refresh Environments",
         "category": "GPUs",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "genv.system.refresh",
+        "title": "Refresh System Information",
+        "category": "GPUs",
+        "icon": "$(refresh)"
       }
     ],
     "menus": {
@@ -160,6 +168,9 @@
         {
           "command": "genv.envs.refresh",
           "when": "genv.installation.installed"
+        },
+        {
+          "command": "genv.system.refresh"
         }
       ],
       "view/title": [
@@ -181,6 +192,11 @@
         {
           "command": "genv.envs.refresh",
           "when": "view == genv.envs",
+          "group": "navigation"
+        },
+        {
+          "command": "genv.system.refresh",
+          "when": "view == genv.system",
           "group": "navigation"
         }
       ],
@@ -227,6 +243,10 @@
           "id": "genv.devices",
           "name": "Devices",
           "when": "genv.installation.installed"
+        },
+        {
+          "id": "genv.system",
+          "name": "System"
         }
       ]
     },
