@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+
+import sys
+
+assert sys.argv[1:] == ["--query"]
+
+print("""\
+
+==============NVSMI LOG==============
+
+Timestamp                                 : Fri Nov 18 18:48:04 2022
+Driver Version                            : 470.141.03
+CUDA Version                              : 11.4
+
+Attached GPUs                             : 4
+GPU 00000000:01:00.0
+    Product Name                          : NVIDIA GeForce RTX 2080 SUPER
+...
+GPU 00000000:02:00.0
+    Product Name                          : NVIDIA GeForce RTX 2080 SUPER
+...
+""")
