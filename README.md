@@ -10,13 +10,7 @@ With _genv_ you could:
 
 ![Overview](/resources/readme/overview.gif)
 
-## Getting Started
-Read the _genv_ [reference](https://github.com/run-ai/genv#usage) to get started.
-
-## Installation
-From the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=run-ai.vscode-genv).
-
-## 🏃🏻 Be an early runner in the AI Infrastructure Club!
+## 🏃🏻 Join us in the AI Infrastructure Club!
 
 [<img src="https://img.shields.io/badge/Discord-Join%20the%20community!-7289da?style=for-the-badge&logo=discord&logoColor=7289da" height="30" />](https://discord.gg/zN3Q9pQAuT)
 
@@ -28,6 +22,11 @@ Looking for a place to discuss best practices, discover new tools, and exchange 
 - Networking events 
 - and many more...
 
+## Getting Started
+Read the _genv_ [reference](https://github.com/run-ai/genv#usage) to get started.
+
+## Installation
+From the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=run-ai.vscode-genv).
 
 ## Features
 ### Setting the Device Count
