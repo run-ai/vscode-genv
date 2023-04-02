@@ -1,7 +1,7 @@
 {
   "name": "vscode-genv",
   "publisher": "run-ai",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "displayName": "GPU Environments",
   "description": "Lets you interactively control, configure and monitor the GPU resources that you are using.",
   "icon": "resources/genv.png",
