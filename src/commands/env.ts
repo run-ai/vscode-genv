@@ -22,6 +22,7 @@ export function init(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('genv.env.attach', attach));
     context.subscriptions.push(vscode.commands.registerCommand('genv.env.detach', detach));
     context.subscriptions.push(vscode.commands.registerCommand('genv.env.attachDevice', attachDevice));
+    context.subscriptions.push(vscode.commands.registerCommand('genv.env.attachDeviceOverSubscription', attachDeviceOverSubscription));
     context.subscriptions.push(vscode.commands.registerCommand('genv.env.detachDevice', detachDevice));
     context.subscriptions.push(vscode.commands.registerCommand('genv.env.config.gpus', configGPUs));
     context.subscriptions.push(vscode.commands.registerCommand('genv.env.config.name', configName));
@@ -80,7 +81,7 @@ async function activate() {
  *
  * @param reconfig - Reconfigure the environment
  */
-async function attach(reconfig: boolean | any=false) {
+async function attach(reconfig: boolean | any = false) {
     if (!env.activated()) {
         await activate();
     }
@@ -143,7 +144,7 @@ async function detach() {
  * Configures the environment device count if not already configured, or if explicitly requested.
  * Refreshes all open terminals and the environment and devices views.
  */
- async function attachDevice(treeItem: vscode.TreeItem) {
+async function attachDevice(treeItem: vscode.TreeItem, overSubscription?: boolean) {
     if (!env.activated()) {
         await activate();
     }
@@ -153,7 +154,7 @@ async function detach() {
         const index = Number(match[1]);
 
         try {
-            await env.attachDevice(index);
+            await env.attachDevice(index, !!overSubscription);
         } catch (error: any) {
             vscode.window.showErrorMessage(`${error.stderr}`);
             vscode.commands.executeCommand('genv.devices.refresh');
@@ -171,11 +172,22 @@ async function detach() {
 }
 
 /**
+ * Attach the environment to a device that is already subscribed.
+ *
+ * Shows a quick pick yes/no before attaching.
+ */
+async function attachDeviceOverSubscription(treeItem: vscode.TreeItem) {
+    if (await vscode.window.showQuickPick(['No', 'Yes'], { placeHolder: 'The device is already being used. Use it with over-subscription?' }) === 'Yes') {
+        attachDevice(treeItem, true);
+    }
+}
+
+/**
  * Detaches the active environment from a device.
  *
  * Refreshes all open terminals and the environment and devices views.
  */
- async function detachDevice(treeItem: vscode.TreeItem) {
+async function detachDevice(treeItem: vscode.TreeItem) {
     if (env.activated()) {
         const match = (treeItem.label as string).match(/GPU\ (\d+)/);
         if (match) {
@@ -202,12 +214,12 @@ async function detach() {
  *
  * @param reattach - Reattach the environment if already attached
  */
-async function configGPUs(reattach: boolean=true): Promise<boolean> {
+async function configGPUs(reattach: boolean = true): Promise<boolean> {
     if (env.activated()) {
         const input: string | undefined = await vscode.window.showInputBox({
             placeHolder: 'Enter GPU count for the environment',
             value: env.attached() ? `${env.indices().length}` : undefined,
-            validateInput: function(input: string): string | undefined {
+            validateInput: function (input: string): string | undefined {
                 return /^([1-9]\d*)?$/.test(input) ? undefined : 'Must be an integer grather than 0';
             }
         });

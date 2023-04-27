@@ -36,9 +36,11 @@ class Device extends vscode.TreeItem {
       this.tooltip = `Attached ${device.attached!.format('MMM D, YYYY hh:mm:ss')}`;
 
       if (device.eid === env.eid) {
+        // TODO(raz): colorize over-subscribed devices in yellow (editorWarning.foreground)
         this.contextValue = 'detach';
         this.iconPath = new vscode.ThemeIcon('circle-large-filled', new vscode.ThemeColor('debugIcon.startForeground'));
       } else {
+        this.contextValue = 'attachOverSubscription';
         this.iconPath = new vscode.ThemeIcon('circle-large-filled', new vscode.ThemeColor('debugIcon.stopForeground'));
       }
     } else {

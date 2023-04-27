@@ -19,7 +19,7 @@ Looking for a place to discuss best practices, discover new tools, and exchange 
 - Installation and setup support as well as best practice tips and tricks directly for your use-case
 - Discuss possible features
 - Monthly Beers with Engineers sessions with amazing guests
-- Networking events 
+- Networking events
 - and many more...
 
 ## Getting Started
@@ -45,6 +45,11 @@ You can switch between GPUs easily by selecting them in the device view.
 ![Choose GPUs](/resources/readme/selectdevices.gif)
 
 ## Development
+### Setup
+```
+npm install
+```
+
 ### Publish
 Bump the version.
 You can use [`npm-version`](https://docs.npmjs.com/cli/v8/commands/npm-version).

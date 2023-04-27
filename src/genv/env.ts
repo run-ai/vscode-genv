@@ -26,7 +26,7 @@ export function activated(): boolean {
 }
 
 export function config(): Config {
-  return state.config;
+	return state.config;
 }
 
 export function indices(): number[] {
@@ -69,8 +69,8 @@ export async function detach() {
 	}
 }
 
-export async function attachDevice(index: number) {
-	const stdout = await devices.attachDevice(eid, index);
+export async function attachDevice(index: number, overSubscription: boolean) {
+	const stdout = await devices.attachDevice(eid, index, overSubscription);
 	state.indices = stdout.split(',').map(Number);
 }
 

@@ -100,6 +100,12 @@
         "icon": "$(add)"
       },
       {
+        "command": "genv.env.attachDeviceOverSubscription",
+        "title": "Attach Environment to Device with Over-subscription",
+        "category": "GPUs",
+        "icon": "$(add)"
+      },
+      {
         "command": "genv.env.detachDevice",
         "title": "Detach Environment from Device",
         "category": "GPUs",
@@ -156,6 +162,10 @@
         },
         {
           "command": "genv.env.attachDevice",
+          "when": "false"
+        },
+        {
+          "command": "genv.env.attachDeviceOverSubscription",
           "when": "false"
         },
         {
@@ -220,6 +230,11 @@
         {
           "command": "genv.env.attachDevice",
           "when": "view == genv.devices && viewItem == attach",
+          "group": "inline"
+        },
+        {
+          "command": "genv.env.attachDeviceOverSubscription",
+          "when": "view == genv.devices && viewItem == attachOverSubscription",
           "group": "inline"
         },
         {
