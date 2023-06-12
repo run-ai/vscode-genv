@@ -230,7 +230,7 @@ async function configGPUs(reattach: boolean = true): Promise<boolean> {
             await env.configGPUs(gpus);
 
             for (let terminal of vscode.window.terminals) {
-                terminal.sendText('genv config gpus --refresh');
+                terminal.sendText('genv config --refresh');
             }
 
             refresh();
@@ -264,7 +264,7 @@ async function configName() {
             await env.configName(name);
 
             for (let terminal of vscode.window.terminals) {
-                terminal.sendText('genv config name --refresh');
+                terminal.sendText('genv config --refresh');
             }
 
             refresh();

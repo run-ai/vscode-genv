@@ -9,7 +9,7 @@ export interface Device {
 }
 
 function exec(command: string): Promise<string> {
-  return control.exec(`exec devices ${command}`);
+  return control.exec(`devices ${command}`);
 }
 
 export async function attach(eid: string, count: number): Promise<string> {

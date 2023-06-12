@@ -10,7 +10,7 @@ export interface Env {
 }
 
 function exec(command: string): Promise<string> {
-  return control.exec(`exec envs ${command}`);
+  return control.exec(`envs ${command}`);
 }
 
 export async function activate(pid: number, eid: string, uid: number, username: string): Promise<void> {

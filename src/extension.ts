@@ -6,7 +6,7 @@ import * as devices from './commands/devices';
 import * as system from './commands/system';
 
 export async function activate(context: vscode.ExtensionContext) {
-  installation.init(context);
+  await installation.init(context);
   env.init(context);
   envs.init(context);
   devices.init(context);

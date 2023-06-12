@@ -1,28 +1,23 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import * as cp from '../utils/cp';
 
-export function root(): string {
-  if (process.env.GENV_ROOT) {
-    return process.env.GENV_ROOT;
+export async function installed(): Promise<boolean> {
+  try {
+    await cp.exec("genv")
+  } catch {
+    return false;
   }
 
-  return path.join(process.env.HOME!, 'genv');
-}
-
-export function installed(): boolean {
-  return fs.existsSync(root());
+  return true;
 }
 
 export function initTerminalCommands(): string[] {
   return [
-    `export PATH="${root()}/bin:$PATH"`,
-    'eval "$(genv init -)"',
+    'eval "$(genv shell --init)"',
   ];
 }
 
 export async function install() {
-  await cp.exec('git clone https://github.com/run-ai/genv.git ~/genv');
+  await cp.exec('pip install genv');
 
   for (let command of initTerminalCommands()) {
     await cp.exec(`echo '${command}' >> ~/.bashrc`);
